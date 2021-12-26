@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  node:
+    container_name: node
+    build:
+      context: ./
+    env_file:
+      - docker.env
+    ports:
+      - 8080:8080
