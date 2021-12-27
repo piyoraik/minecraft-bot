@@ -1,48 +1,23 @@
-import express from 'express'
-import { Client, Intents } from 'discord.js'
 import {
   EC2Client,
   StartInstancesCommand,
   StopInstancesCommand,
 } from '@aws-sdk/client-ec2'
 import { defaultProvider } from '@aws-sdk/credential-provider-node'
+import { CacheType, CommandInteraction } from 'discord.js'
 
-const TOKEN = process.env.TOKEN
-const INSTANCE_ID = process.env.INSTANCE_ID
-const discordClient = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
-})
 const provider = defaultProvider({})
 const ec2Client = new EC2Client({
   region: 'ap-northeast-1',
   credentials: provider,
 })
+const INSTANCE_ID = process.env.INSTANCE_ID!
+type StatusCOMMAND = 'START' | 'STOP'
 
-const app = express()
-app.get('/', (req, res) => {
-  res.send('Discord Bot')
-})
-
-discordClient.on('interactionCreate', async (interaction) => {
-  if (!interaction.isCommand()) {
-    return
-  }
-  if (interaction.commandName === 'start') {
-    await interaction.reply({
-      content: 'EC2 Instance StartUp...',
-    })
-    run(interaction, 'START')
-  }
-  if (interaction.commandName === 'kill') {
-    await interaction.reply({
-      content: 'EC2 Instance Shutdown...',
-    })
-    run(interaction, 'STOP')
-  }
-})
-discordClient.login(TOKEN)
-
-const run = async (interaction, command) => {
+export const ec2Status = async (
+  interaction: CommandInteraction<CacheType>,
+  command: StatusCOMMAND
+) => {
   if (command === 'START') {
     try {
       const data = await ec2Client.send(
@@ -67,8 +42,3 @@ const run = async (interaction, command) => {
     }
   }
 }
-
-const port = process.env.PORT || 8080
-app.listen(port, () => {
-  console.log('Listening on port', port)
-})

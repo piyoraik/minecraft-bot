@@ -3,3 +3,5 @@ docker.env
 .DS_Store
 yarn.lock
 node_modules/
+.gitignore
+dist
