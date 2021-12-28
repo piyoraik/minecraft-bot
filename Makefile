@@ -4,7 +4,10 @@ build:
 	@docker compose build
 
 buildx:
-	@docker buildx build --platform linux/amd64 -t $(IMAGE_ID):latest .
+	@docker buildx build --platform linux/amd64 -t $(REPOSITORY):latest .
+
+pushx:
+	@docker push $(REPOSITORY):latest
 
 up:
 	@docker compose up -d

@@ -5,7 +5,6 @@ import { ec2Status } from './ec2Status'
 const discordClient = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 })
-
 const app = express()
 app.get('/', (req: Request, res: Response) => {
   res.send('Discord Bot')
