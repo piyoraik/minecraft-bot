@@ -1,14 +1,13 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
 import { CacheType, Client, Intents, Interaction } from 'discord.js'
-import { ec2Status } from './ec2Status'
+import indexRouter from './router/index'
+import { mcStart, mcStop } from './service/mcServerOperation'
 
 const discordClient = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 })
 const app = express()
-app.get('/', (req: Request, res: Response) => {
-  res.send('Discord Bot')
-})
+app.use('/', indexRouter)
 
 discordClient.on(
   'interactionCreate',
@@ -20,13 +19,20 @@ discordClient.on(
       await interaction.reply({
         content: 'EC2 Instance StartUp...',
       })
-      ec2Status(interaction, 'START')
+      const ec2StartMessage = await mcStart()
+      await interaction.followUp({
+        content: ec2StartMessage,
+      })
     }
     if (interaction.commandName === 'kill') {
       await interaction.reply({
         content: 'EC2 Instance Shutdown...',
       })
-      ec2Status(interaction, 'STOP')
+      const ec2StopMessage = await mcStop()
+      await interaction.followUp({
+        content: `EC2 Instance Shutdown Success 
+        ${ec2StopMessage}`,
+      })
     }
     if (interaction.commandName === 'test') {
       await interaction.reply({
