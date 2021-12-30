@@ -4,8 +4,11 @@ services:
     container_name: node
     build:
       context: ./
+      target: dev
     env_file:
       - docker.env
+    volumes:
+      - ./:/build
     ports:
       - 8080:8080
     tty: true

@@ -41,6 +41,7 @@ discordClient.on('interactionCreate', (interaction) => __awaiter(void 0, void 0,
     if (interaction.commandName === 'test') {
         yield interaction.reply({
             content: 'うまぴょい！うまぴょい！',
+            ephemeral: true,
         });
     }
 }));

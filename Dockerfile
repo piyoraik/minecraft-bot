@@ -1,8 +1,13 @@
-FROM node:17.3.0-alpine AS build
+FROM node:17.3.0-alpine AS base
 WORKDIR /build
 COPY package*.json ./
 RUN npm install
 COPY . .
+
+FROM base AS dev
+CMD [ "npm", "run", "dev" ]
+
+FROM base AS build
 RUN npm run tsc
 
 FROM node:17.3.0-alpine AS production

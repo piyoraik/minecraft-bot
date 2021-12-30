@@ -4,4 +4,4 @@ docker.env
 yarn.lock
 node_modules/
 .gitignore
-dist
+dist/

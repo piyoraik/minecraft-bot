@@ -31,6 +31,7 @@ discordClient.on(
     if (interaction.commandName === 'test') {
       await interaction.reply({
         content: 'うまぴょい！うまぴょい！',
+        ephemeral: true,
       })
     }
   }
