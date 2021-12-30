@@ -5,6 +5,9 @@ import {
 } from '@aws-sdk/client-ec2'
 import { defaultProvider } from '@aws-sdk/credential-provider-node'
 import { CacheType, CommandInteraction } from 'discord.js'
+import { setTimeout } from 'timers/promises'
+import { ssmOperation } from './ssmOperation'
+import { StatusCOMMAND } from './types/StatusCommand'
 
 const provider = defaultProvider({})
 const ec2Client = new EC2Client({
@@ -12,7 +15,6 @@ const ec2Client = new EC2Client({
   credentials: provider,
 })
 const INSTANCE_ID = process.env.INSTANCE_ID!
-type StatusCOMMAND = 'START' | 'STOP'
 
 export const ec2Status = async (
   interaction: CommandInteraction<CacheType>,
@@ -31,6 +33,9 @@ export const ec2Status = async (
     }
   } else if (command === 'STOP') {
     try {
+      const ssmCommand = await ssmOperation('STOP', interaction)
+      if (ssmCommand === 0) throw Error('実行エラー')
+      await setTimeout(30000)
       const data = await ec2Client.send(
         new StopInstancesCommand({ InstanceIds: [INSTANCE_ID] })
       )
