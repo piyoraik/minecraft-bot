@@ -40,7 +40,7 @@ export const ssmCommandOperation = async (command: string) => {
       throw Error('error')
     }
 
-    await setTimeout(3000)
+    await setTimeout(10000)
 
     // 実行結果を取得する
     const commandRes = new ListCommandInvocationsCommand({
@@ -48,6 +48,7 @@ export const ssmCommandOperation = async (command: string) => {
       InstanceId: INSTANCE_ID,
     })
     const commandResResult = await ssmClient.send(commandRes)
+    console.log(commandResResult)
     return {
       status: 1,
       content: `SSM_実行ID: ${

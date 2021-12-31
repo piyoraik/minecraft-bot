@@ -1,4 +1,4 @@
-import { Client, Intents } from 'discord.js'
+const { Client, Intents } = require('discord.js')
 
 const TOKEN = process.env.TOKEN
 const SERVERID = process.env.SERVERID
@@ -14,6 +14,11 @@ client.once('ready', async () => {
     {
       name: 'kill',
       description: 'Minecraftサーバーの停止',
+      options: [],
+    },
+    {
+      name: 'backup',
+      description: 'Minecraftサーバーのバックアップ',
       options: [],
     },
     {

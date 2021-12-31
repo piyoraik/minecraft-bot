@@ -1,7 +1,7 @@
 import express from 'express'
 import { CacheType, Client, Intents, Interaction } from 'discord.js'
 import indexRouter from './router/index'
-import { mcStart, mcStop } from './service/mcServerOperation'
+import { mcBackup, mcStart, mcStop } from './service/mcServerOperation'
 
 const discordClient = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -23,8 +23,10 @@ discordClient.on(
       await interaction.followUp({
         content: ec2StartMessage,
       })
+      await mcBackup()
     }
     if (interaction.commandName === 'kill') {
+      await mcBackup()
       await interaction.reply({
         content: 'EC2 Instance Shutdown...',
       })
@@ -32,6 +34,15 @@ discordClient.on(
       await interaction.followUp({
         content: `EC2 Instance Shutdown Success 
         ${ec2StopMessage}`,
+      })
+    }
+    if (interaction.commandName === 'backup') {
+      await interaction.reply({
+        content: 'Minecraft World BackUp Start..',
+      })
+      const mcBackupMessage = await mcBackup()
+      await interaction.followUp({
+        content: `Minecraft World BackUp to S3 Completed`,
       })
     }
     if (interaction.commandName === 'test') {
