@@ -32,20 +32,3 @@ export const mcStop = async () => {
     }
   }
 }
-
-export const mcBackup = async () => {
-  try {
-    const commandRes = await ssmCommandOperation(
-      'sh /etc/minecraft_server/backup'
-    )
-    await setTimeout(50000)
-    if (commandRes.status === 0) throw Error(commandRes.content)
-    return commandRes.content
-  } catch (err) {
-    if (err instanceof Error) {
-      return err.message
-    } else {
-      return 'Unexpected Error'
-    }
-  }
-}

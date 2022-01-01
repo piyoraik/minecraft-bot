@@ -17,11 +17,6 @@ client.once('ready', async () => {
       options: [],
     },
     {
-      name: 'backup',
-      description: 'Minecraftサーバーのバックアップ',
-      options: [],
-    },
-    {
       name: 'test',
       description: 'test',
       options: [],

@@ -12,5 +12,8 @@ pushx:
 up:
 	@docker compose up -d
 
+flogs:
+	@docker logs -f node
+
 down:
 	@docker compose down
