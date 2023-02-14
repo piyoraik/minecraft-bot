@@ -32,3 +32,23 @@ export const mcStop = async () => {
     }
   }
 }
+
+export const mcModsLs = async () => {
+  try {
+    const commandRes = await ssmCommandOperation(
+      'su - ec2-user -c "ls -1 ~/minecraft/mods"'
+    )
+    await setTimeout(10000)
+    return commandRes.output
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return err.message
+    } else {
+      return 'Unexpected Error'
+    }
+  }
+}
+
+export const mcAddMod = async () => {
+  
+}

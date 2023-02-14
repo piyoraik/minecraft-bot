@@ -1,7 +1,7 @@
 import express from 'express'
 import { CacheType, Client, Intents, Interaction } from 'discord.js'
 import indexRouter from './router/index'
-import { mcStart, mcStop } from './service/mcServerOperation'
+import { mcModsLs, mcStart, mcStop } from './service/mcServerOperation'
 
 const discordClient = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -34,6 +34,21 @@ discordClient.on(
         ${ec2StopMessage}`,
       })
     }
+    if (interaction.commandName === 'modlist') {
+      await interaction.reply({
+        content: 'サーバーに導入済みのModを一覧表示します...',
+      })
+      interaction.channel?.sendTyping()
+      const list = await mcModsLs()
+      await interaction.followUp({
+        content: '```' + list + '```',
+      })
+    }
+    if (interaction.commandName === 'addmod') {
+      const modUrl = interaction.options.data[0].value
+      if(!modUrl) await interaction.reply({ content: "modのURLが入力されてないか予期せぬエラーが発生しました。" })
+    }
+    // テストコマンド
     if (interaction.commandName === 'test') {
       await interaction.reply({
         content: 'うまぴょい！うまぴょい！',

@@ -1,7 +1,7 @@
 import {
   SSMClient,
   SendCommandCommand,
-  ListCommandInvocationsCommand,
+  GetCommandInvocationCommand,
 } from '@aws-sdk/client-ssm'
 import { defaultProvider } from '@aws-sdk/credential-provider-node'
 import { setTimeout } from 'timers/promises'
@@ -43,17 +43,16 @@ export const ssmCommandOperation = async (command: string) => {
     await setTimeout(10000)
 
     // 実行結果を取得する
-    const commandRes = new ListCommandInvocationsCommand({
+    const res = new GetCommandInvocationCommand({
       CommandId: commandReqID,
       InstanceId: INSTANCE_ID,
     })
-    const commandResResult = await ssmClient.send(commandRes)
-    console.log(commandResResult)
+
+    const commandResResult = await ssmClient.send(res)
     return {
       status: 1,
-      content: `SSM_実行ID: ${
-        commandResResult.CommandInvocations![0].CommandId
-      }`,
+      content: `SSM_実行ID: ${commandResResult.CommandId}`,
+      output: commandResResult.StandardOutputContent,
     } as ssmCommandOperationRes
   } catch (err) {
     return {
