@@ -17,6 +17,11 @@ client.once('ready', async () => {
       options: [],
     },
     {
+      name: 'restart',
+      description: 'Minecraftサーバーの再起動(SystemCtl)',
+      options: [],
+    },
+    {
       name: 'modlist',
       description: '導入済みのModの表示',
       options: [],
